@@ -1,4 +1,4 @@
-import mysql, { Pool, PoolOptions } from "mysql2";
+import mysql, { Pool, PoolOptions } from "mysql2/promise";
 
 const poolConfig: PoolOptions = {
   host: process.env.DB_HOST || "localhost",
@@ -9,16 +9,6 @@ const poolConfig: PoolOptions = {
   //connectionLimit: 10, // Number of concurrent connections
   //queueLimit: 0,
 };
-
 const pool: Pool = mysql.createPool(poolConfig);
 
-/*  pool.getConnection((err, connection) => {
-    if (err) {
-      console.error('Error connecting to the database:', err.message);
-    } else {
-      console.log('Connected to the MySQL database.');
-      connection.release();
-    }
-  }); */
-
-export default pool.promise();
+export default pool;
