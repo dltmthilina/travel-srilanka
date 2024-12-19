@@ -2,23 +2,24 @@ import { ResultSetHeader } from "mysql2";
 import db from "../utils/database";
 
 interface UserProps {
-  id: number | null;
-  fName: string;
-  lName: string;
+  id?: number;
+  fName?: string;
+  lName?: string;
   email: string;
+  password: string;
 }
 
 export class Tourist implements UserProps {
-  id: number | null;
-  fName: string;
-  lName: string;
+  id?: number;
+  fName?: string;
+  lName?: string;
   email: string;
-  country: string;
+  country?: string;
   password: string;
   dpImageUrl?: string;
 
   constructor(
-    id: number | null,
+    id: number,
     fname: string,
     lname: string,
     dpImageUrl: string,
@@ -36,7 +37,7 @@ export class Tourist implements UserProps {
   }
 
   async create(): Promise<ResultSetHeader> {
-    const query = `INSERT INTO users(id, firstName, lastName, email,country, password, dpImage) VALUES(?, ?, ?, ?, ?, ?)`;
+    const query = `INSERT INTO users(id, firstName, lastName, email, country, password, dpImage) VALUES(?, ?, ?, ?, ?, ?)`;
     const [result] = await db.execute<ResultSetHeader>(query, [
       this.id,
       this.fName,
