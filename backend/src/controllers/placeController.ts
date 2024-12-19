@@ -1,20 +1,33 @@
 import { Request, Response, NextFunction } from "express";
-import { TourPlace } from "../models/place";
+import TourPlace from "../models/place";
 
-exports.createPlace = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { title, description, location, userId } = req.body;
-  const newPlace = new TourPlace(null, title, description, location, userId);
-  newPlace
-    .createPlace()
-    .then(() => {})
-    .catch(() => {});
+const createPlace = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { title, description, location, userId } = req.body;
+    if (!title || !description || !location || !userId) {
+       res.status(400).json({ message: "Missing required fields" });
+    }
+    const newPlace = new TourPlace(null, title, description, location, userId);
+  } catch (error) {}
 };
-exports.getAllPlacesByUid = () => {};
-exports.getPlaceByUid = () => {};
-exports.getPlaceByPid = () => {};
-exports.getPlacesByDid = () => {};
-exports.getPlacesByCategory = () => {};
+const getAllPlacesByUid = () => {
+  try {
+  } catch (error) {}
+};
+const getPlaceByPid = () => {};
+const getPlacesByDid = () => {};
+const getPlacesByCategory = () => {};
+const updatePlace = () => {};
+const deletePlace = () => {};
+//const getPlaceByUid = () => {};
+
+export default {
+  createPlace,
+  getAllPlacesByUid,
+  //getPlaceByUid,
+  getPlaceByPid,
+  getPlacesByDid,
+  getPlacesByCategory,
+  updatePlace,
+  deletePlace,
+};
