@@ -9,7 +9,7 @@ interface UserProps {
   password: string;
 }
 
-export class Tourist implements UserProps {
+export default class Tourist implements UserProps {
   id?: number;
   fName?: string;
   lName?: string;
@@ -39,7 +39,6 @@ export class Tourist implements UserProps {
   async create(): Promise<ResultSetHeader> {
     const query = `INSERT INTO users(id, firstName, lastName, email, country, password, dpImage) VALUES(?, ?, ?, ?, ?, ?)`;
     const [result] = await db.execute<ResultSetHeader>(query, [
-      this.id,
       this.fName,
       this.lName,
       this.email,
