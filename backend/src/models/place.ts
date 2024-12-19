@@ -14,7 +14,7 @@ interface PlaceAttributes {
   userId: number;
 }
 
-export class TourPlace implements PlaceAttributes {
+export default class TourPlace implements PlaceAttributes {
   constructor(
     id: number | null,
     title: string,
