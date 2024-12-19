@@ -35,7 +35,7 @@ export default class TourPlace implements PlaceAttributes {
   userId: number;
 
   async createPlace(): Promise<ResultSetHeader> {
-    const query = `INSERT INTO Places (title, description, longitude, latitude, userId ) VALUES (?, ?, ?, ?, ?)`;
+    const query = `INSERT INTO places (title, description, longitude, latitude, userId ) VALUES (?, ?, ?, ?, ?)`;
     const [result] = await db.execute<ResultSetHeader>(query, [
       this.title,
       this.description,
