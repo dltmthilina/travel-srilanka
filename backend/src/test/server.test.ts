@@ -1,9 +1,16 @@
 import request from "supertest"; // Import Supertest
-import server from "../server"; // Import your server
+import { startServer, stopServer } from "./testUtils";
+import { App } from "supertest/types";
 
 describe("Server", () => {
+  let server: App;
+
+  beforeAll(() => {
+    server = startServer();
+  });
+
   afterAll(() => {
-    server.close(); // Close the server after tests to release the port
+    stopServer();
   });
 
   it("should return a health check message", async () => {
