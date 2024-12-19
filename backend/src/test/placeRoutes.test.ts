@@ -5,12 +5,11 @@ import { App } from "supertest/types";
 jest.mock("../models/place"); // Mock the Place model to isolate controller logic
 import TourPlace from "../models/place";
 
-// Mock implementation for TourPlace's createPlace method
-TourPlace.prototype.createPlace = jest.fn().mockResolvedValue({
-  insertId: 1, // Mocked database response for a successful insert
-});
-
 describe("POST /create-place", () => {
+  // Mock implementation for TourPlace's createPlace method
+  TourPlace.prototype.createPlace = jest.fn().mockResolvedValue({
+    insertId: 1, // Mocked database response for a successful insert
+  });
   let server: App;
 
   beforeAll(() => {
