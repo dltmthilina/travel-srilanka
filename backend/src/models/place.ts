@@ -61,4 +61,17 @@ export default class TourPlace implements PlaceAttributes {
       row.userId
     );
   }
+
+  static async updatePlace(id: number, data: Partial<TourPlace>) {
+    const query =
+      "UPDATE places SET title = ?, description = ?, longitude = ?, latitude = ? WHERE id = ? ";
+    const [result] = await db.execute(query, [
+      data.title,
+      data.description,
+      data.location?.longitude,
+      data.location?.latitude,
+      id,
+    ]);
+    return result;
+  }
 }
