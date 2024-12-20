@@ -20,12 +20,38 @@ const createPlace = async (req: Request, res: Response, next: NextFunction) => {
     next(new HttpError("Failed to create place. Please try again later", 500));
   }
 };
-const getAllPlacesByUid = () => {};
-const getPlaceByPid = () => {};
-const getPlacesByDid = () => {};
-const getPlacesByCategory = () => {};
+
+const getPlaceByPid = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const placeId = parseInt(req.params.pid);
+  if (placeId === null || placeId === undefined || isNaN(placeId)) {
+    next(new HttpError("Invalid place ID", 400));
+    return;
+  }
+  try {
+    const tourPlace = await TourPlace.getPlaceById(placeId);
+    if (tourPlace === null) {
+      next(new HttpError("Place not found", 404));
+      return;
+    }
+    res.status(200).json(tourPlace);
+  } catch (error) {
+    next(
+      new HttpError(
+        "An unexpected error occurred. Please try again later.",
+        500
+      )
+    );
+  }
+};
 const updatePlace = () => {};
 const deletePlace = () => {};
+const getPlacesByDid = () => {};
+const getPlacesByCategory = () => {};
+const getAllPlacesByUid = () => {};
 //const getPlaceByUid = () => {};
 
 export default {
