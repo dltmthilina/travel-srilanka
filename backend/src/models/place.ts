@@ -45,4 +45,20 @@ export default class TourPlace implements PlaceAttributes {
     ]);
     return result;
   }
+
+  async getPlaceById(placeId: number): Promise<TourPlace | null> {
+    const query = "SELECT * FROM places WHERE id = ?";
+    const [rows]: any[] = await db.execute(query, [placeId]);
+    if (rows.length === 0) {
+      return null; // No user found
+    }
+    const row = rows[0];
+    return new TourPlace(
+      row.id,
+      row.title,
+      row.description,
+      { longitude: row.longitude, latitude: row.latitude },
+      row.userId
+    );
+  }
 }
