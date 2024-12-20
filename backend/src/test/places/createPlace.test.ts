@@ -1,9 +1,9 @@
 import request from "supertest";
-import { startServer, stopServer } from "./testUtils";
+import { startServer, stopServer } from "../testUtils";
 import { App } from "supertest/types";
 
-jest.mock("../models/place"); // Mock the Place model to isolate controller logic
-import TourPlace from "../models/place";
+jest.mock("../../models/place"); // Mock the Place model to isolate controller logic
+import TourPlace from "../../models/place";
 
 describe("POST /create-place", () => {
   // Mock implementation for TourPlace's createPlace method
