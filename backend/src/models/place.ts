@@ -79,9 +79,30 @@ export default class TourPlace implements PlaceAttributes {
     return result;
   }
 
-  static async deletePlace<ResultSetHeader>(placeId: number) {
+  static async deletePlace(placeId: number): Promise<ResultSetHeader> {
     const query = `DELETE FROM places WHERE id = ?`;
-    const result = await db.execute(query, [placeId]);
+    const [result] = await db.execute<ResultSetHeader>(query, [placeId]);
     return result;
+  }
+
+  static async getPlacesByUid(userId: number): Promise<TourPlace[] | null> {
+    const query = `SELECT * FROM places WHERE userId = ?`;
+    const [rows]: any[] = await db.execute<ResultSetHeader>(query, [userId]);
+
+    if (rows.length === 0) {
+      return null;
+    }
+    const places: TourPlace[] = [];
+    rows.map((row: any) => {
+      const place = new TourPlace(
+        row.id,
+        row.title,
+        row.description,
+        { longitude: row.longitude, latitude: row.latitude },
+        row.userId
+      );
+      places.push(place);
+    });
+    return places;
   }
 }
