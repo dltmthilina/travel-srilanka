@@ -34,8 +34,6 @@ export default class TourPlace implements PlaceAttributes {
   location: location;
   userId: number;
 
- 
-
   async createPlace(): Promise<ResultSetHeader> {
     const query = `INSERT INTO places (title, description, longitude, latitude, userId ) VALUES (?, ?, ?, ?, ?)`;
     const [result] = await db.execute<ResultSetHeader>(query, [
@@ -78,6 +76,12 @@ export default class TourPlace implements PlaceAttributes {
       this.location.latitude,
       this.id,
     ]);
+    return result;
+  }
+
+  static async deletePlacePromise<ResultSetHeader>(placeId: number) {
+    const query = `DELETE FROM places WHERE id = ?`;
+    const result = await db.execute(query, [placeId]);
     return result;
   }
 }
