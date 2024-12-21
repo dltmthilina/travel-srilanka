@@ -79,7 +79,7 @@ export default class TourPlace implements PlaceAttributes {
     return result;
   }
 
-  static async deletePlacePromise<ResultSetHeader>(placeId: number) {
+  static async deletePlace<ResultSetHeader>(placeId: number) {
     const query = `DELETE FROM places WHERE id = ?`;
     const result = await db.execute(query, [placeId]);
     return result;
