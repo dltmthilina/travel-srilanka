@@ -34,6 +34,8 @@ export default class TourPlace implements PlaceAttributes {
   location: location;
   userId: number;
 
+ 
+
   async createPlace(): Promise<ResultSetHeader> {
     const query = `INSERT INTO places (title, description, longitude, latitude, userId ) VALUES (?, ?, ?, ?, ?)`;
     const [result] = await db.execute<ResultSetHeader>(query, [
@@ -48,7 +50,7 @@ export default class TourPlace implements PlaceAttributes {
 
   static async getPlaceById(placeId: number): Promise<TourPlace | null> {
     const query = "SELECT * FROM places WHERE id = ?";
-    const [rows]: any[] = await db.execute(query, [placeId]);
+    const [rows]: any[] = await db.execute<ResultSetHeader>(query, [placeId]);
     if (rows.length === 0) {
       return null; // No user found
     }
@@ -62,15 +64,19 @@ export default class TourPlace implements PlaceAttributes {
     );
   }
 
-  static async updatePlace(id: number, data: Partial<TourPlace>) {
-    const query =
-      "UPDATE places SET title = ?, description = ?, longitude = ?, latitude = ? WHERE id = ? ";
-    const [result] = await db.execute(query, [
-      data.title,
-      data.description,
-      data.location?.longitude,
-      data.location?.latitude,
-      id,
+  async updatePlace(): Promise<ResultSetHeader> {
+    const query = `UPDATE places 
+               SET title = COALESCE(?, title), 
+                   description = COALESCE(?, description), 
+                   longitude = COALESCE(?, longitude), 
+                   latitude = COALESCE(?, latitude) 
+               WHERE id = ?`;
+    const [result] = await db.execute<ResultSetHeader>(query, [
+      this.title,
+      this.description,
+      this.location.longitude,
+      this.location.latitude,
+      this.id,
     ]);
     return result;
   }
