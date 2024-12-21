@@ -109,10 +109,38 @@ const updatePlace = async (req: Request, res: Response, next: NextFunction) => {
     );
   }
 };
-const deletePlace = () => {};
+const deletePlace = async (req: Request, res: Response, next: NextFunction) => {
+  const placeId = parseInt(req.params.pid);
+  if (placeId === null || placeId === undefined || isNaN(placeId)) {
+    next(new HttpError("Invalid place ID", 400));
+    return;
+  }
+  try {
+    const existingPlace = await TourPlace.getPlaceById(placeId);
+    if (!existingPlace) {
+      next(new HttpError("Place not found", 404));
+      return;
+    }
+    const response = await TourPlace.deletePlace(placeId);
+    res
+      .status(200)
+      .json({ message: "Place deleted successfully!", deletedItemId: placeId });
+  } catch (error) {
+    next(
+      new HttpError(
+        "An unexpected error occurred. Please try again later.",
+        500
+      )
+    );
+  }
+};
+const getAllPlacesByUid = (req: Request, res: Response, next: NextFunction) => {
+  
+};
 const getPlacesByDid = () => {};
 const getPlacesByCategory = () => {};
-const getAllPlacesByUid = () => {};
+const getAllPlaceByCurrentLocation = () => {};
+
 //const getPlaceByUid = () => {};
 
 export default {
