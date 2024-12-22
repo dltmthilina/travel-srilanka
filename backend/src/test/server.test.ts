@@ -1,28 +1,21 @@
-const app = require("../server");
-const request = require("supertest");
+import request from "supertest"; // Import Supertest
+import { startServer, stopServer } from "./testUtils";
+import { App } from "supertest/types";
 
-describe("add function", () => {
-  /*  test("should add two numbers correctly", () => {
-    expect(add(1, 2)).toBe(3);
+describe("Server", () => {
+  let server: App;
+
+  beforeAll(() => {
+    server = startServer();
   });
 
-  test("should return a negative number when adding a positive and a negative number", () => {
-    expect(add(1, -2)).toBe(-1);
+  afterAll(() => {
+    stopServer();
   });
 
-  test("should return zero when adding zero and zero", () => {
-    expect(add(0, 0)).toBe(0);
-  });
-
-  test("should return zero when adding zero and zero", () => {
-    expect(add(0, 0)).toBe(0);
-  }); */
-
-  it("should return a welcome message on GET /", async () => {
-    const response = await request(app).get("/");
+  it("should return a health check message", async () => {
+    const response = await request(server).get("/");
     expect(response.status).toBe(200);
-    expect(response.body).toEqual({
-      message: "Welcome to the Node.js server!",
-    });
+    expect(response.body.message).toBe("Server is running!");
   });
 });
