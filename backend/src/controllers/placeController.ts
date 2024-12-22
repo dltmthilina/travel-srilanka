@@ -9,8 +9,17 @@ const createPlace = async (req: Request, res: Response, next: NextFunction) => {
     next(new HttpError("Invalid inputs, please check your data", 400));
   }
   try {
-    const { title, description, location, userId } = req.body;
-    const newPlace = new TourPlace(null, title, description, location, userId);
+    const { title, description, location, district, categories, userId } =
+      req.body;
+    const newPlace = new TourPlace(
+      null,
+      title,
+      description,
+      location,
+      district,
+      categories,
+      userId
+    );
     const result = await newPlace.createPlace();
     res.status(201).json({
       message: "Place created successfully!",
@@ -63,8 +72,7 @@ const updatePlace = async (req: Request, res: Response, next: NextFunction) => {
     next(new HttpError("Invalid place ID", 400));
     return;
   }
-  const { title, description, longitude, latitude } = req.body;
-
+  const { title, description, location, district, categories } = req.body;
   try {
     const existingPlace = await TourPlace.getPlaceById(placeId);
     if (existingPlace === null) {
@@ -76,29 +84,22 @@ const updatePlace = async (req: Request, res: Response, next: NextFunction) => {
       title || existingPlace.title,
       description || existingPlace.description,
       {
-        longitude: longitude || existingPlace.location.longitude,
-        latitude: latitude || existingPlace.location.latitude,
+        longitude: location.longitude || existingPlace.location.longitude,
+        latitude: location.latitude || existingPlace.location.latitude,
       },
+      district || existingPlace.district,
+      categories || existingPlace.categories,
       existingPlace.userId
     );
 
     const result = await updatedPlace.updatePlace();
-    if (result.affectedRows === 0) {
+    if (!result) {
       next(new HttpError("Failed to update place", 500));
       return;
     }
     res.status(200).json({
       message: "Place updated successfully!",
-      updatedPlace: {
-        id: placeId,
-        title: title || existingPlace.title,
-        description: description || existingPlace.description,
-        location: {
-          longitude: longitude || existingPlace.location.longitude,
-          latitude: latitude || existingPlace.location.latitude,
-        },
-        userId: existingPlace.userId,
-      },
+      updatedPlace: result,
     });
   } catch (error) {
     next(
