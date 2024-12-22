@@ -134,8 +134,33 @@ const deletePlace = async (req: Request, res: Response, next: NextFunction) => {
     );
   }
 };
-const getAllPlacesByUid = (req: Request, res: Response, next: NextFunction) => {
-  
+const getAllPlacesByUid = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const userId = parseInt(req.params.uid);
+  if (userId === null || userId === undefined || isNaN(userId)) {
+    next(new HttpError("Invalid User Id", 400));
+    return;
+  }
+  try {
+    const places = await TourPlace.getPlacesByUid(userId);
+    if (!places) {
+      next(new HttpError("Not found places", 404));
+      return;
+    }
+    res.status(200).json({
+      places: places,
+    });
+  } catch (error) {
+    next(
+      new HttpError(
+        "An unexpected error occurred. Please try again later.",
+        500
+      )
+    );
+  }
 };
 const getPlacesByDid = () => {};
 const getPlacesByCategory = () => {};

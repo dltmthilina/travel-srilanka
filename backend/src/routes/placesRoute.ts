@@ -13,7 +13,7 @@ router.post(
   ],
   placeControllers.createPlace
 );
-router.get("/", placeControllers.getAllPlacesByUid);
+
 router.get("/:pid", placeControllers.getPlaceByPid);
 router.put(
   "/:pid",
@@ -21,6 +21,7 @@ router.put(
   placeControllers.updatePlace
 );
 router.delete("/:pid", placeControllers.deletePlace);
+router.get("/user/:uid", placeControllers.getAllPlacesByUid);
 router.get("/:category", placeControllers.getPlacesByCategory);
 
 module.exports = router;
