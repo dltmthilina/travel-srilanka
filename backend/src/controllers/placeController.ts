@@ -26,7 +26,7 @@ const createPlace = async (req: Request, res: Response, next: NextFunction) => {
       placeId: result.insertId,
     });
   } catch (error) {
-    next(new HttpError("Failed to create place. Please try again later", 500));
+    next(new HttpError(`Failed to create place. Please try again later`, 500));
   }
 };
 
@@ -79,20 +79,16 @@ const updatePlace = async (req: Request, res: Response, next: NextFunction) => {
       next(new HttpError("Place not found", 404));
       return;
     }
-    const updatedPlace = new TourPlace(
-      placeId, // Pass id here
-      title || existingPlace.title,
-      description || existingPlace.description,
-      {
-        longitude: location.longitude || existingPlace.location.longitude,
-        latitude: location.latitude || existingPlace.location.latitude,
-      },
-      district || existingPlace.district,
-      categories || existingPlace.categories,
-      existingPlace.userId
-    );
+    const result = await TourPlace.updatePlace({
+      id: existingPlace.id,
+      title,
+      description,
+      location,
+      district,
+      categories,
+      userId: existingPlace.userId,
+    });
 
-    const result = await updatedPlace.updatePlace();
     if (!result) {
       next(new HttpError("Failed to update place", 500));
       return;
@@ -102,12 +98,7 @@ const updatePlace = async (req: Request, res: Response, next: NextFunction) => {
       updatedPlace: result,
     });
   } catch (error) {
-    next(
-      new HttpError(
-        "An unexpected error occurred. Please try again later.",
-        500
-      )
-    );
+    next(error);
   }
 };
 const deletePlace = async (req: Request, res: Response, next: NextFunction) => {
