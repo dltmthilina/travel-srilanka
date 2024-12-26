@@ -29,7 +29,10 @@ pipeline {
                 script {
                     // Login to Docker Hub and push the backend image
                     withDockerRegistry([credentialsId: DOCKERHUB_CREDENTIALS, url: '']) {
-                        bat "docker push ${DOCKER_REPO_BACKEND}:latest"
+                        retry(3) { // Retry up to 3 times
+                                 bat "docker push ${DOCKER_REPO_BACKEND}:latest"
+                        }
+                        
                     }
                 }
             }
