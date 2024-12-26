@@ -3,8 +3,8 @@ pipeline {
 
     environment {
         DOCKERHUB_CREDENTIALS = 'docker_hub_cred' // Docker Hub credentials ID
-        DOCKER_REPO_FRONTEND = 'your-dockerhub-username/frontend-image'
-        DOCKER_REPO_BACKEND = 'your-dockerhub-username/backend-image'
+        DOCKER_REPO_FRONTEND = 'ceylontravellife-backend/frontend-image'
+        DOCKER_REPO_BACKEND = 'ceylontravellife-backend/backend-image'
     }
 
     stages {
@@ -19,7 +19,7 @@ pipeline {
             steps {
                 script {
                     // Navigate to the backend folder and build Docker image
-                    sh 'cd backend && docker build -t $DOCKER_REPO_BACKEND:latest .'
+                    bat 'cd backend && docker build -t $DOCKER_REPO_BACKEND:latest .'
                 }
             }
         }
@@ -29,7 +29,7 @@ pipeline {
                 script {
                     // Login to Docker Hub and push the backend image
                     withDockerRegistry([credentialsId: DOCKERHUB_CREDENTIALS, url: '']) {
-                        sh 'docker push $DOCKER_REPO_BACKEND:latest'
+                        bat 'docker push $DOCKER_REPO_BACKEND:latest'
                     }
                 }
             }
