@@ -17,11 +17,16 @@ router.post(
 router.get("/:pid", placeControllers.getPlaceByPid);
 router.put(
   "/:pid",
-  [check("title").isString(), check("description").isString()],
+  [
+    check("title").isString(),
+    check("description").isString(),
+    check("district").isString(),
+  ],
   placeControllers.updatePlace
 );
 router.delete("/:pid", placeControllers.deletePlace);
 router.get("/user/:uid", placeControllers.getAllPlacesByUid);
 router.get("/:category", placeControllers.getPlacesByCategory);
+router.get("/:district", placeControllers.getPlacesByDistrict);
 
 module.exports = router;
