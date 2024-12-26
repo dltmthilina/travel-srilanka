@@ -54,9 +54,7 @@ describe("PUT /places/pid", () => {
     };
 
     (TourPlace.getPlaceById as jest.Mock).mockResolvedValue(mockExistingPlace);
-    (TourPlace.prototype.updatePlace as jest.Mock).mockResolvedValue(
-      mockUpdatedPlace
-    );
+    (TourPlace.updatePlace as jest.Mock).mockResolvedValue(mockUpdatedPlace);
 
     const response = await request(server)
       .put(`/places/${mockPlaceId}`)
@@ -69,7 +67,7 @@ describe("PUT /places/pid", () => {
       JSON.stringify(mockUpdatedPlace)
     );
     expect(TourPlace.getPlaceById).toHaveBeenCalledWith(mockPlaceId);
-    expect(TourPlace.prototype.updatePlace).toHaveBeenCalled();
+    expect(TourPlace.updatePlace).toHaveBeenCalled();
   });
 
   /////////////////////////////////////////////////////////////////////////////////////
@@ -90,7 +88,7 @@ describe("PUT /places/pid", () => {
 
     expect(response.status).toBe(404);
     expect(response.body.message).toBe("Place not found");
-    expect(TourPlace.prototype.updatePlace).not.toHaveBeenCalled();
+    expect(TourPlace.updatePlace).not.toHaveBeenCalled();
   });
 
   ///////////////////////////////////////////////////////////////////////////////////////
@@ -121,7 +119,7 @@ describe("PUT /places/pid", () => {
     expect(response.body.message).toBe(
       "Invalid inputs, please check your data"
     );
-    expect(TourPlace.prototype.updatePlace).not.toHaveBeenCalled();
+    expect(TourPlace.updatePlace).not.toHaveBeenCalled();
   });
 
   /////////////////////////////////////////////////////////////////////
@@ -144,7 +142,7 @@ describe("PUT /places/pid", () => {
     };
 
     (TourPlace.getPlaceById as jest.Mock).mockResolvedValue(mockExistingPlace);
-    (TourPlace.prototype.updatePlace as jest.Mock).mockRejectedValue(
+    (TourPlace.updatePlace as jest.Mock).mockRejectedValue(
       new Error("Database connection failed")
     );
 
@@ -155,6 +153,6 @@ describe("PUT /places/pid", () => {
     expect(response.body.message).toBe(
       "An unexpected error occurred. Please try again later."
     );
-    expect(TourPlace.prototype.updatePlace).toHaveBeenCalled();
+    expect(TourPlace.updatePlace).toHaveBeenCalled();
   });
 });

@@ -5,8 +5,9 @@
   "main": "server.ts",
   "scripts": {
     "test": "jest --runInBand",
-    "start": "ts-node src/server.ts",
-    "dev": "nodemon --watch src --exec ts-node src/server.ts"
+    "dev": "tsc --watch & nodemon dist/server.js",
+    "build": "tsc",
+    "start": "node dist/server.js"
   },
   "author": "",
   "license": "ISC",
