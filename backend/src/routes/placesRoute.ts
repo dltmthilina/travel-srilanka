@@ -27,5 +27,6 @@ router.put(
 router.delete("/:pid", placeControllers.deletePlace);
 router.get("/user/:uid", placeControllers.getAllPlacesByUid);
 router.get("/:category", placeControllers.getPlacesByCategory);
+router.get("/:district", placeControllers.getPlacesByDistrict);
 
 module.exports = router;

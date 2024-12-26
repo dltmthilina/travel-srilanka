@@ -154,7 +154,13 @@ const getAllPlacesByUid = async (
     );
   }
 };
-const getPlacesByDid = () => {};
+const getPlacesByDistrict = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const district = req.body;
+};
 const getPlacesByCategory = () => {};
 const getAllPlaceByCurrentLocation = () => {};
 
@@ -165,7 +171,7 @@ export default {
   getAllPlacesByUid,
   //getPlaceByUid,
   getPlaceByPid,
-  getPlacesByDid,
+  getPlacesByDistrict,
   getPlacesByCategory,
   updatePlace,
   deletePlace,
