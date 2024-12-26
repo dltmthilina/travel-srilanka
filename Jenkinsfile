@@ -11,7 +11,7 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 // Pull the latest code from the Git repository
-                git branch: 'main', url: 'https://github.com/username/repository.git'
+                git branch: 'main', url: 'https://github.com/dltmthilina/travel-srilanka'
             }
         }
 
