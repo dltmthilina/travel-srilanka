@@ -19,7 +19,7 @@ pipeline {
             steps {
                 script {
                     // Navigate to the backend folder and build Docker image
-                    bat 'cd backend && docker build -t $DOCKER_REPO_BACKEND:latest .'
+                    bat "cd backend && docker build -t ${DOCKER_REPO_BACKEND}:latest ."
                 }
             }
         }
@@ -29,7 +29,7 @@ pipeline {
                 script {
                     // Login to Docker Hub and push the backend image
                     withDockerRegistry([credentialsId: DOCKERHUB_CREDENTIALS, url: '']) {
-                        bat 'docker push $DOCKER_REPO_BACKEND:latest'
+                        bat "docker push ${DOCKER_REPO_BACKEND}:latest"
                     }
                 }
             }
