@@ -1,0 +1,30 @@
+.image-container {
+  position: relative;
+}
+
+.headline {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.line1{
+    color: #ffff;
+    font-size: 4rem;
+    font-weight: 700;
+    text-shadow: 3px 3px 1px #1D5283;
+}
+
+.line2{
+    color: #ffff;
+    font-size: 5rem;
+    font-weight: 700;
+    text-shadow: 3px 3px 3px #1D5283;
+}
+
+.line3{
+    color: #ffff;
+    font-size: 4rem;
+    font-weight: 700;
+    text-shadow: 3px 3px 3px #1D5283;
+}

@@ -1,0 +1,17 @@
+.carousel-container {
+    height: 800px; /* Set a fixed height for the carousel */
+    overflow: hidden;
+  }
+  
+  .carousel-image {
+    width: 100%; /* Make the image responsive */
+    height: 100%; /* Stretch the height to match the container */
+    object-fit: cover; /* Maintain aspect ratio and cover the container */
+  }
+
+  @media (min-width: 768px) {
+    .carousel-container {
+      height: 600px; /* Set a fixed height for the carousel */
+      overflow: hidden;
+    }
+  }

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { HeaderMenuBar } from "@/components/header-menubar";
+import { SlideShow } from "@/components/slide-show";
+import styles from "./layout.module.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,6 +30,14 @@ export default function RootLayout({
       <header>
         <HeaderMenuBar />
       </header>
+      <div className={styles["image-container"]}>
+        <SlideShow />
+        <div className={styles["headline"]}>
+          <p className={styles["line1"]}>Your</p>
+          <p className={styles["line2"]}>Travel</p>
+          <p className={styles["line3"]}>Companion</p>
+        </div>
+      </div>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
