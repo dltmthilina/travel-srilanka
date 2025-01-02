@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = 'docker_hub_cred' // Docker Hub credentials ID
+        DOCKERHUB_CREDENTIALS = 'docker-cred' // Docker Hub credentials ID
         //DOCKER_REPO_FRONTEND = 'logicloom2/frontend-image'
         DOCKER_REPO_BACKEND = 'logicloom2/ceylontravellife-backend'
     }
