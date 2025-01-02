@@ -7,6 +7,12 @@ pipeline {
         DOCKER_REPO_BACKEND = 'logicloom2/ceylontravellife-backend'
     }
 
+
+     triggers {
+        // Trigger Jenkins on push or merge into the 'main' branch
+        githubPush()
+    }
+
     stages {
         stage('Checkout Code') {
             steps {
