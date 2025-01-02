@@ -28,7 +28,7 @@ pipeline {
             steps {
                 script {
                     // Login to Docker Hub and push the backend image
-                    docker.withRegistry([credentialsId: DOCKERHUB_CREDENTIALS, url: '']) {
+                    withDockerRegistry([credentialsId: DOCKERHUB_CREDENTIALS, url: '']) {
                         retry(3) { // Retry up to 3 times
                                  sh "docker push ${DOCKER_REPO_BACKEND}:latest"
                         }
