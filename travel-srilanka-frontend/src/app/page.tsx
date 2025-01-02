@@ -3,6 +3,7 @@ import styles from "./page.module.css";
 import { PlaceCard } from "@/components/place-card/place-card";
 import im1 from "../../asset/slidshow/01.jpeg";
 import im2 from "../../asset/slidshow/02.jpg";
+import im3 from "../../asset/slidshow/03.jpg";
 
 const places = [
   {
@@ -14,6 +15,12 @@ const places = [
   {
     id: 2,
     imageUrl: im2.src,
+    title: "Bopath fall",
+    district: "Rathnapura",
+  },
+  {
+    id: 3,
+    imageUrl: im3.src,
     title: "Bopath fall",
     district: "Rathnapura",
   },
