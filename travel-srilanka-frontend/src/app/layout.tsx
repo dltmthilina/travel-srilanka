@@ -45,6 +45,7 @@ export default function RootLayout({
             <p className={styles["line1"]}>Your</p>
             <p className={styles["line2"]}>Travel</p>
             <p className={styles["line3"]}>Companion</p>
+            <p className={styles["line3"]}>in SriLanka</p>
           </div>
         </div>
 
