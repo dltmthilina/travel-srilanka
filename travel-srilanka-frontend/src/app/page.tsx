@@ -4,7 +4,6 @@ import { PlaceCard } from "@/components/place-card/place-card";
 import im1 from "../../asset/slidshow/01.jpeg";
 import im2 from "../../asset/slidshow/02.jpg";
 import im3 from "../../asset/slidshow/03.jpg";
-import im4 from "../../asset/slidshow/04.jpg";
 
 const places = [
   {
@@ -22,12 +21,6 @@ const places = [
   {
     id: 3,
     imageUrl: im3.src,
-    title: "Small dabbadiwa",
-    district: "Rathnapura",
-  },
-  {
-    id: 4,
-    imageUrl: im4.src,
     title: "Small dabbadiwa",
     district: "Rathnapura",
   },
