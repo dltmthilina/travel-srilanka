@@ -24,6 +24,7 @@ const places = [
     title: "Small dabbadiwa",
     district: "Rathnapura",
   },
+  
 ];
 
 const Home = () => {
