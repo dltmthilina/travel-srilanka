@@ -8,11 +8,6 @@ pipeline {
     }
 
 
-     triggers {
-        // Trigger Jenkins on push or merge into the 'main' branch
-        githubPush()
-    }
-
     stages {
         stage('Checkout Code') {
             steps {
@@ -25,7 +20,7 @@ pipeline {
             steps {
                 script {
                     // Navigate to the backend folder and build Docker image
-                    sh "cd backend && docker build -t ${DOCKER_REPO_BACKEND}:latest ."
+                    dat "cd backend && docker build -t ${DOCKER_REPO_BACKEND}:latest ."
                 }
             }
         }
@@ -36,7 +31,7 @@ pipeline {
                     // Login to Docker Hub and push the backend image
                     withDockerRegistry([credentialsId: DOCKERHUB_CREDENTIALS, url: '']) {
                         retry(3) { // Retry up to 3 times
-                                 sh "docker push ${DOCKER_REPO_BACKEND}:latest"
+                                 dat "docker push ${DOCKER_REPO_BACKEND}:latest"
                         }
                         
                     }
