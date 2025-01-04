@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import bodyParser from "body-parser";
 const placeRoutes = require("./routes/placesRoute");
 const userRoutes = require("./routes/userRoutes");
+const currencyRoutes = require("./routes/currencyRoute");
 
 interface CustomError extends Error {
   code?: number; // Optional property for error code
@@ -15,6 +16,7 @@ app.use(bodyParser.json());
 
 app.use("/users", userRoutes);
 app.use("/places", placeRoutes);
+app.use("/currency", currencyRoutes);
 
 app.use(
   (error: CustomError, req: Request, res: Response, next: NextFunction) => {

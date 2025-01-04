@@ -4,6 +4,7 @@ import { PlaceCard } from "@/components/place-card/place-card";
 import im1 from "../../asset/slidshow/01.jpeg";
 import im2 from "../../asset/slidshow/02.jpg";
 import im3 from "../../asset/slidshow/03.jpg";
+import { Col, Row } from "antd";
 
 const places = [
   {
@@ -24,7 +25,6 @@ const places = [
     title: "Small dabbadiwa",
     district: "Rathnapura",
   },
-  
 ];
 
 const Home = () => {
@@ -34,9 +34,13 @@ const Home = () => {
         <DistrictMap />
       </div>
       <div className={styles["newly-added"]}>
-        {places.map((place) => (
-          <PlaceCard key={place.id} place={place} />
-        ))}
+        <Row gutter={[8, 8]} justify="start">
+          {places.map((item) => (
+            <Col key={item.id} xs={24} sm={12} md={8} lg={6}>
+              <PlaceCard key={item.id} place={item} />
+            </Col>
+          ))}
+        </Row>
       </div>
     </>
   );
