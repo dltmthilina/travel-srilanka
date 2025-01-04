@@ -2,14 +2,14 @@ import { ResultSetHeader } from "mysql2";
 import db from "../utils/database";
 
 interface UserProps {
-  id?: number;
+  id: number | null;
   fName?: string;
   lName?: string;
   email: string;
 }
 
 export default class Tourist implements UserProps {
-  id?: number;
+  id: number | null;
   fName?: string;
   lName?: string;
   email: string;
@@ -18,7 +18,7 @@ export default class Tourist implements UserProps {
   dpImageUrl?: string;
 
   constructor(
-    id: number,
+    id: number | null,
     fname: string,
     lname: string,
     dpImageUrl: string,
@@ -36,7 +36,7 @@ export default class Tourist implements UserProps {
   }
 
   async create(): Promise<ResultSetHeader> {
-    const query = `INSERT INTO users(firstName, lastName, email, country, password, dpImage) VALUES(?, ?, ?, ?, ?, ?)`;
+    const query = `INSERT INTO users(firstName, lastName, email, country, password, imageUrl) VALUES(?, ?, ?, ?, ?, ?)`;
     const [result] = await db.execute<ResultSetHeader>(query, [
       this.fName,
       this.lName,
@@ -64,6 +64,25 @@ export default class Tourist implements UserProps {
       ""
     );
   }
+
+  static async getByEmail(email: string): Promise<Tourist | null> {
+    const query = `SELECT * FROM users WHERE email = ?`;
+    const [rows]: any[] = await db.execute(query, [email]);
+    if (rows.length === 0) {
+      return null; // No user found
+    }
+    const row = rows[0];
+    return new Tourist(
+      row.id,
+      row.firstName,
+      row.lastName,
+      row.dpImage,
+      row.email,
+      row.country,
+      ""
+    );
+  }
+
   getByPlaceId() {}
   getAll() {}
   update() {}
