@@ -7,7 +7,8 @@ const router = express.Router();
 router.post(
   "/register",
   [
-    check("name").isString().not().isEmpty(),
+    check("fname").isString().not().isEmpty(),
+    check("lname").isString().not().isEmpty(),
     check("country").isString().not().isEmpty(),
     check("email").isString().not().isEmpty(),
     check("password").isString().not().isEmpty(),

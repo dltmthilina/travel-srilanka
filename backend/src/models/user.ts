@@ -24,7 +24,7 @@ export default class Tourist implements UserProps {
     dpImageUrl: string,
     email: string,
     country: string,
-    password?: string
+    password: string
   ) {
     this.id = id;
     this.fName = fname;
@@ -60,8 +60,8 @@ export default class Tourist implements UserProps {
       row.lastName,
       row.dpImage,
       row.email,
-
-      row.country
+      row.country,
+      ""
     );
   }
   getByPlaceId() {}

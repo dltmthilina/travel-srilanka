@@ -5,6 +5,10 @@ import Tourist from "../models/user";
 
 const signUp = (req: Request, res: Response, next: NextFunction) => {
   const errors = validationResult(req);
+  const{fname,lname, country, email, password} = req.body;
+  if (!errors.isEmpty()) {
+    next(new HttpError("Invalid inputs, please check your data", 400));
+  }
 };
 const signIn = (req: Request, res: Response, next: NextFunction) => {};
 const getUserByUserId = async (
