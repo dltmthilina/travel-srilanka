@@ -1,9 +1,12 @@
 import { Request, Response, NextFunction } from "express";
+import { validationResult } from "express-validator";
 import HttpError from "../models/httpError";
 import Tourist from "../models/user";
 
-const signUp = () => {};
-const signIn = () => {};
+const signUp = (req: Request, res: Response, next: NextFunction) => {
+  const errors = validationResult(req);
+};
+const signIn = (req: Request, res: Response, next: NextFunction) => {};
 const getUserByUserId = async (
   req: Request,
   res: Response,
