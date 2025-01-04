@@ -14,6 +14,7 @@ export default class Tourist implements UserProps {
   lName?: string;
   email: string;
   country?: string;
+  password?: string;
   dpImageUrl?: string;
 
   constructor(
@@ -22,23 +23,26 @@ export default class Tourist implements UserProps {
     lname: string,
     dpImageUrl: string,
     email: string,
-    country: string
+    country: string,
+    password?: string
   ) {
     this.id = id;
     this.fName = fname;
     this.lName = lname;
     this.email = email;
     this.country = country;
+    this.password = password;
     this.dpImageUrl = dpImageUrl;
   }
 
   async create(): Promise<ResultSetHeader> {
-    const query = `INSERT INTO users(id, firstName, lastName, email, country, password, dpImage) VALUES(?, ?, ?, ?, ?, ?)`;
+    const query = `INSERT INTO users(firstName, lastName, email, country, password, dpImage) VALUES(?, ?, ?, ?, ?, ?)`;
     const [result] = await db.execute<ResultSetHeader>(query, [
       this.fName,
       this.lName,
       this.email,
       this.country,
+      this.password,
       this.dpImageUrl,
     ]);
     return result;
@@ -56,6 +60,7 @@ export default class Tourist implements UserProps {
       row.lastName,
       row.dpImage,
       row.email,
+
       row.country
     );
   }
