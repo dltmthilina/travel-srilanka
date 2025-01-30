@@ -3,7 +3,6 @@ pipeline {
 
     environment {
         DOCKERHUB_CREDENTIALS = 'docker-cred' // Docker Hub credentials ID
-        DOCKER_REPO_FRONTEND = 'logicloom2/ceylontravellife-frontend'
         DOCKER_REPO_BACKEND = 'logicloom2/ceylontravellife-backend'
     }
 
@@ -16,9 +15,24 @@ pipeline {
             }
         }
 
+        stage('Check Changes in Backend') {
+            steps {
+                script {
+                    def changes = bat(script: 'git diff --name-only HEAD~1 HEAD', returnStdout: true).trim()
+                    if (!changes.contains('backend/')) {
+                        echo "No changes in backend. Skipping build."
+                        currentBuild.result = 'SUCCESS'
+                        error("Skipping build since no backend changes detected.")
+                    }
+                }
+            }
+        }
+
+
         stage('Build Backend Image') {
             steps {
                 script {
+                    def imageTag = "latest"
                     // Navigate to the backend folder and build Docker image
                     bat "cd backend && docker build -t %DOCKER_REPO_BACKEND%:latest ."
                 }
@@ -39,25 +53,6 @@ pipeline {
             }
         }
 
-         stage('Build Frontend Image') {
-            steps {
-                script {
-                    // Navigate to the frontend folder and build Docker image
-                    bat 'cd frontend && docker build -t $DOCKER_REPO_FRONTEND:latest .'
-                }
-            }
-        }
-
-        stage('Push Frontend Image') {
-            steps {
-                script {
-                    // Login to Docker Hub and push the frontend image
-                    withDockerRegistry([credentialsId: DOCKERHUB_CREDENTIALS, url: '']) {
-                        bat 'docker push $DOCKER_REPO_FRONTEND:latest'
-                    }
-                }
-            }
-        } 
     }
 
     post {
