@@ -42,7 +42,7 @@ pipeline {
                 script {
                     // Login to Docker Hub and push the frontend image
                     withDockerRegistry([credentialsId: DOCKERHUB_CREDENTIALS, url: '']) {
-                        bat 'docker push $DOCKER_REPO_FRONTEND:latest'
+                        bat 'docker push %DOCKER_REPO_FRONTEND%:latest'
                     }
                 }
             }
