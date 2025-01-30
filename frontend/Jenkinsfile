@@ -1,0 +1,60 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKERHUB_CREDENTIALS = 'docker-cred' // Docker Hub credentials ID
+        DOCKER_REPO_FRONTEND = 'logicloom2/ceylontravellife-frontend'
+    }
+
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                // Pull the latest code from the Git repository
+                git branch: 'main', url: 'https://github.com/dltmthilina/travel-srilanka'
+            }
+        }
+
+         stage('Check Changes in Frontend') {
+            steps {
+                script {
+                    def changes = bat(script: 'git diff --name-only HEAD~1 HEAD', returnStdout: true).trim()
+                    if (!changes.contains('frontend/')) {
+                        echo "No changes in frontend. Skipping build."
+                        currentBuild.result = 'SUCCESS'
+                        error("Skipping build since no frontend changes detected.")
+                    }
+                }
+            }
+        }
+
+         stage('Build Frontend Image') {
+            steps {
+                script {
+                    // Navigate to the frontend folder and build Docker image
+                    bat 'cd frontend && docker build -t $DOCKER_REPO_FRONTEND:latest .'
+                }
+            }
+        }
+
+        stage('Push Frontend Image') {
+            steps {
+                script {
+                    // Login to Docker Hub and push the frontend image
+                    withDockerRegistry([credentialsId: DOCKERHUB_CREDENTIALS, url: '']) {
+                        bat 'docker push $DOCKER_REPO_FRONTEND:latest'
+                    }
+                }
+            }
+        } 
+    }
+
+    post {
+        success {
+            echo 'Pipeline executed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
+    }
+}
