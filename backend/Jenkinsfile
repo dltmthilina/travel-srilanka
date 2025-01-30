@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKERHUB_CREDENTIALS = 'docker-cred' // Docker Hub credentials ID
-        //DOCKER_REPO_FRONTEND = 'logicloom2/frontend-image'
+        DOCKER_REPO_FRONTEND = 'logicloom2/ceylontravellife-frontend'
         DOCKER_REPO_BACKEND = 'logicloom2/ceylontravellife-backend'
     }
 
@@ -39,11 +39,11 @@ pipeline {
             }
         }
 
-       /*  stage('Build Frontend Image') {
+         stage('Build Frontend Image') {
             steps {
                 script {
                     // Navigate to the frontend folder and build Docker image
-                    sh 'cd frontend && docker build -t $DOCKER_REPO_FRONTEND:latest .'
+                    bat 'cd frontend && docker build -t $DOCKER_REPO_FRONTEND:latest .'
                 }
             }
         }
@@ -53,11 +53,11 @@ pipeline {
                 script {
                     // Login to Docker Hub and push the frontend image
                     withDockerRegistry([credentialsId: DOCKERHUB_CREDENTIALS, url: '']) {
-                        sh 'docker push $DOCKER_REPO_FRONTEND:latest'
+                        bat 'docker push $DOCKER_REPO_FRONTEND:latest'
                     }
                 }
             }
-        } */
+        } 
     }
 
     post {
