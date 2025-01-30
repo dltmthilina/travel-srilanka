@@ -8,6 +8,11 @@ pipeline {
 
 
     stages {
+         stage('Clean Workspace') {
+            steps {
+                cleanWs() // Clean the workspace to ensure no cached files
+            }
+        }
         stage('Checkout Code') {
             steps {
                 // Pull the latest code from the Git repository
