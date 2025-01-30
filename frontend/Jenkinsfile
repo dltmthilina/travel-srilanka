@@ -37,7 +37,7 @@ pipeline {
             steps {
                 script {
                     // Navigate to the frontend folder and build Docker image
-                    bat 'cd frontend && docker build -t $DOCKER_REPO_FRONTEND:latest .'
+                    bat 'cd frontend && docker build -t %DOCKER_REPO_FRONTEND%:latest .'
                 }
             }
         }
