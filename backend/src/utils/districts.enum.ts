@@ -23,5 +23,5 @@ export enum Districts {
   Puttalam = "Puttalam",
   Ratnapura = "Ratnapura",
   Trincomalee = "Trincomalee",
-  Vavuniya = "Vavuniya",
+  //Vavuniya = "Vavuniya",
 }
