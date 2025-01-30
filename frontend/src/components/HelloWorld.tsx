@@ -2,7 +2,7 @@ const HelloWorld = () => {
     return (
         <>
             <h1>Hello World</h1>
-            <h3>Pipeline test</h3>
+            <h3> frontend Pipeline test</h3>
             <hr />
             <h3>Environmental variables:</h3>
             <p>
