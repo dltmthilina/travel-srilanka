@@ -6,9 +6,8 @@ pipeline {
         DOCKER_REPO_FRONTEND = 'logicloom2/ceylontravellife-frontend'
     }
 
-
     stages {
-         stage('Clean Workspace') {
+        stage('Clean Workspace') {
             steps {
                 cleanWs() // Clean the workspace to ensure no cached files
             }
@@ -20,10 +19,10 @@ pipeline {
             }
         }
 
-         stage('Check Changes in Frontend') {
+        stage('Check Changes in Frontend') {
             steps {
                 script {
-                    def changes = bat(script: 'git diff --name-only HEAD~1 HEAD', returnStdout: true).trim()
+                    def changes = sh(script: 'git diff --name-only HEAD~1 HEAD', returnStdout: true).trim()
                     if (!changes.contains('frontend/')) {
                         echo "No changes in frontend. Skipping build."
                         currentBuild.result = 'SUCCESS'
@@ -33,11 +32,11 @@ pipeline {
             }
         }
 
-         stage('Build Frontend Image') {
+        stage('Build Frontend Image') {
             steps {
                 script {
                     // Navigate to the frontend folder and build Docker image
-                    bat 'cd frontend && docker build -t %DOCKER_REPO_FRONTEND%:latest .'
+                    sh 'cd frontend && docker build -t $DOCKER_REPO_FRONTEND:latest .'
                 }
             }
         }
@@ -47,7 +46,7 @@ pipeline {
                 script {
                     // Login to Docker Hub and push the frontend image
                     withDockerRegistry([credentialsId: DOCKERHUB_CREDENTIALS, url: '']) {
-                        bat 'docker push %DOCKER_REPO_FRONTEND%:latest'
+                        sh 'docker push $DOCKER_REPO_FRONTEND:latest'
                     }
                 }
             }
