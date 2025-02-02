@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "main": "index.js",
     "scripts": {
+        "start": "serve -s build -l 80",
         "start:dev": "webpack-cli serve --mode=development --env development --open --hot --config webpack.config.ts",
         "build": "webpack --mode=production --env production --progress",
         "lint": "eslint './src/**/*.{ts,tsx}'",
