@@ -1,14 +1,21 @@
 import express, { Request, Response, NextFunction } from "express";
 import bodyParser from "body-parser";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
 const placeRoutes = require("./routes/placesRoute");
 const userRoutes = require("./routes/userRoutes");
+
+dotenv.config({ path: ".env.local" });
+let server: any;
+
+const MONGO_URI = `mongodb+srv://CTL_1:${process.env.MONGODB_USER_KEY}@cluster0.ere8a.mongodb.net/travellife?retryWrites=true&w=majority&appName=Cluster0`;
 
 interface CustomError extends Error {
   code?: number; // Optional property for error code
 }
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(bodyParser.json());
@@ -30,8 +37,14 @@ app.get("/", (req, res) => {
   res.status(200).json({ message: "Server is running!" });
 });
 
-const server = app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+mongoose
+  .connect(MONGO_URI)
+  .then((result) => {
+    console.log("Connected to MongoDB");
+    server = app.listen(PORT, () => {
+      console.log("Server is running!");
+    });
+  })
+  .catch((err) => console.log(err));
 
 export default server;
