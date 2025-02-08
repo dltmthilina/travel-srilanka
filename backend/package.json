@@ -5,7 +5,7 @@
   "main": "server.ts",
   "scripts": {
     "test": "jest --runInBand",
-    "dev": "tsc --watch & nodemon dist/server.js",
+    "dev": "ts-node --watch & nodemon src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js"
   },
