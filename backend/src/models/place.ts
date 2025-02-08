@@ -1,5 +1,5 @@
 import { ResultSetHeader } from "mysql2";
-import db from "../utils/database";
+import db from "../db/sql_con";
 
 interface Location {
   longitude: number;
