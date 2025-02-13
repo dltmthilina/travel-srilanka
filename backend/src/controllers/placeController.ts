@@ -3,6 +3,8 @@ import { validationResult } from "express-validator";
 import TourPlace from "../models/place";
 import HttpError from "../models/httpError";
 
+///////////////////////create place////////////////////////////////////////
+
 const createPlace = async (req: Request, res: Response, next: NextFunction) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -101,6 +103,9 @@ const updatePlace = async (req: Request, res: Response, next: NextFunction) => {
     next(error);
   }
 };
+
+///////////////////////delete place////////////////////////////
+
 const deletePlace = async (req: Request, res: Response, next: NextFunction) => {
   const placeId = parseInt(req.params.pid);
   if (placeId === null || placeId === undefined || isNaN(placeId)) {
@@ -126,6 +131,9 @@ const deletePlace = async (req: Request, res: Response, next: NextFunction) => {
     );
   }
 };
+
+///////////////////////get all places by user id///////////////////////////
+
 const getAllPlacesByUid = async (
   req: Request,
   res: Response,
@@ -154,6 +162,9 @@ const getAllPlacesByUid = async (
     );
   }
 };
+
+//////////////////////////////////get all places by district///////////////////////
+
 const getPlacesByDistrict = (
   req: Request,
   res: Response,

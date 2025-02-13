@@ -6,7 +6,6 @@ const placeRoutes = require("./routes/placesRoute");
 const userRoutes = require("./routes/userRoutes");
 
 dotenv.config({ path: ".env.local" });
-let server: any;
 
 const MONGO_URI = `mongodb+srv://CTL_1:${process.env.MONGODB_USER_KEY}@cluster0.ere8a.mongodb.net/travellife?retryWrites=true&w=majority&appName=Cluster0`;
 
@@ -37,14 +36,21 @@ app.get("/", (req, res) => {
   res.status(200).json({ message: "Server is running!" });
 });
 
-mongoose
-  .connect(MONGO_URI)
-  .then((result) => {
+const startServer = async () => {
+  try {
+    await mongoose.connect(MONGO_URI);
     console.log("Connected to MongoDB");
-    server = app.listen(PORT, () => {
-      console.log("Server is running!");
-    });
-  })
-  .catch((err) => console.log(err));
+  } catch (err) {
+    console.log("Failed to connect to MongoDB:", err);
+    process.exit(1); // Exit if MongoDB connection fails
+  }
+};
+if (process.env.NODE_ENV !== "test") {
+  startServer();
+}
+
+const server = app.listen(PORT, () => {
+  console.log("Server is running on port " + PORT);
+});
 
 export default server;
