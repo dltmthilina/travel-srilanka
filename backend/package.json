@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.ts",
   "scripts": {
-    "test": "jest --runInBand",
+    "test": "cross-env NODE_ENV=test jest --runInBand",
     "dev": "ts-node --watch & nodemon src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js"
@@ -30,6 +30,7 @@
     "@types/jest": "^29.5.14",
     "@types/node": "^22.13.1",
     "@types/supertest": "^6.0.2",
+    "cross-env": "^7.0.3",
     "nodemon": "^3.1.9",
     "prettier": "^3.4.2",
     "supertest": "^7.0.0",
