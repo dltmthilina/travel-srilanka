@@ -78,8 +78,8 @@ describe("PUT /places/pid", () => {
     const mockUpdatedData = {
       title: "New Place Title",
       description: "New description",
-      longitude: 80.9876,
-      latitude: 7.123,
+      location: { longitude: 80.9876, latitude: 7.123 },
+      district: Districts.Ampara,
     };
     (TourPlace.getPlaceById as jest.Mock).mockResolvedValue(null);
     const response = await request(server)
@@ -139,6 +139,7 @@ describe("PUT /places/pid", () => {
       title: "New Place Title",
       description: "New description",
       location: { longitude: 80.9876, latitude: 7.123 },
+      district: Districts.Ampara,
     };
 
     (TourPlace.getPlaceById as jest.Mock).mockResolvedValue(mockExistingPlace);
@@ -149,10 +150,9 @@ describe("PUT /places/pid", () => {
     const response = await request(server)
       .put(`/places/${mockPlaceId}`)
       .send(mockUpdatedData);
+
+    expect(response.body.message).toBe("Database connection failed");
     expect(response.status).toBe(500);
-    expect(response.body.message).toBe(
-      "An unexpected error occurred. Please try again later."
-    );
     expect(TourPlace.updatePlace).toHaveBeenCalled();
   });
 });
