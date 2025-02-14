@@ -36,21 +36,14 @@ app.get("/", (req, res) => {
   res.status(200).json({ message: "Server is running!" });
 });
 
-const startServer = async () => {
-  try {
-    await mongoose.connect(MONGO_URI);
-    console.log("Connected to MongoDB");
-  } catch (err) {
-    console.log("Failed to connect to MongoDB:", err);
-    process.exit(1); // Exit if MongoDB connection fails
-  }
-};
-if (process.env.NODE_ENV !== "test") {
-  startServer();
-}
-
-const server = app.listen(PORT, () => {
-  console.log("Server is running on port " + PORT);
-});
-
-export default server;
+mongoose
+  .connect(MONGO_URI)
+  .then((result) => {
+    console.log("mongodb connected");
+    app.listen(PORT, () => {
+      console.log("Server is running on port " + PORT);
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
