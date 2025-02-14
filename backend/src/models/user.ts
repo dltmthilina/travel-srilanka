@@ -1,4 +1,27 @@
-import { ResultSetHeader } from "mysql2";
+import mongoose from "mongoose";
+
+const Schema = mongoose.Schema;
+
+const userSchema = new Schema({
+  firstName: {
+    type: String,
+    require: true,
+  },
+  lastName: {
+    type: String,
+    require: true,
+  },
+  email: {
+    type: String,
+    require: true,
+  },
+  conuntry: String,
+  dpImage: String,
+});
+
+export const User = mongoose.model("User", userSchema);
+
+/* import { ResultSetHeader } from "mysql2";
 import db from "../db/sql_con";
 
 interface UserProps {
@@ -88,3 +111,4 @@ export default class Tourist implements UserProps {
   update() {}
   delete() {}
 }
+ */

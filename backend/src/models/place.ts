@@ -1,4 +1,26 @@
-import { ResultSetHeader } from "mysql2";
+import mongoose, { mongo } from "mongoose";
+
+const Schema = mongoose.Schema;
+
+export const placeSchema = new Schema({
+  title: {
+    type: String,
+    require: true,
+  },
+  description: String,
+  location: {
+    longitude: { type: Number, require: true },
+    latitude: { type: Number, require: true },
+  },
+  district: String,
+  categories: [String],
+  images: [String],
+  userId: String,
+});
+
+export const Place = mongoose.model("Place", placeSchema);
+
+/* import { ResultSetHeader } from "mysql2";
 import db from "../db/sql_con";
 
 interface Location {
@@ -219,3 +241,4 @@ export default class TourPlace implements PlaceAttributes {
     return places;
   }
 }
+ */
