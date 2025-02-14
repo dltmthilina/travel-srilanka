@@ -32,18 +32,18 @@ app.use(
   }
 );
 
-app.get("/", (req, res) => {
+app.get("/", (req: Request, res: Response) => {
   res.status(200).json({ message: "Server is running!" });
 });
 
 mongoose
   .connect(MONGO_URI)
-  .then((result) => {
+  .then((result: any) => {
     console.log("mongodb connected");
     app.listen(PORT, () => {
       console.log("Server is running on port " + PORT);
     });
   })
-  .catch((err) => {
+  .catch((err: any) => {
     console.log(err);
   });

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
-import TourPlace from "../models/place";
+import { Place } from "../models/place";
 import HttpError from "../models/httpError";
 
 ///////////////////////create place////////////////////////////////////////
@@ -13,19 +13,18 @@ const createPlace = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { title, description, location, district, categories, userId } =
       req.body;
-    const newPlace = new TourPlace(
-      null,
+    const newPlace = new Place({
       title,
       description,
       location,
       district,
       categories,
-      userId
-    );
-    const result = await newPlace.createPlace();
+      userId,
+    });
+    const result = await newPlace.save();
     res.status(201).json({
       message: "Place created successfully!",
-      placeId: result.insertId,
+      placeId: result.id,
     });
   } catch (error) {
     next(new HttpError(`Failed to create place. Please try again later`, 500));
@@ -39,20 +38,20 @@ const getPlaceByPid = async (
   res: Response,
   next: NextFunction
 ) => {
-  const placeId = parseInt(req.params.pid);
-  if (placeId === null || placeId === undefined || isNaN(placeId)) {
+  const placeId = req.params.pid;
+  if (placeId === null || placeId === undefined) {
     next(new HttpError("Invalid place ID", 400));
     return;
   }
   try {
-    const tourPlace = await TourPlace.getPlaceById(placeId);
+    const tourPlace = await Place.findById(placeId);
     if (tourPlace === null) {
       next(new HttpError("Place not found", 404));
       return;
     }
     res.status(200).json(tourPlace);
   } catch (error) {
-    next(
+    return next(
       new HttpError(
         "An unexpected error occurred. Please try again later.",
         500
@@ -61,91 +60,20 @@ const getPlaceByPid = async (
   }
 };
 
-//////////////////////////update place//////////////////////////////
-
-const updatePlace = async (req: Request, res: Response, next: NextFunction) => {
-  const placeId = parseInt(req.params.pid);
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    next(new HttpError("Invalid inputs, please check your data", 400));
-    return;
-  }
-  if (placeId === null || placeId === undefined || isNaN(placeId)) {
-    next(new HttpError("Invalid place ID", 400));
-    return;
-  }
-  const { title, description, location, district, categories } = req.body;
-  try {
-    const existingPlace = await TourPlace.getPlaceById(placeId);
-    if (existingPlace === null) {
-      next(new HttpError("Place not found", 404));
-      return;
-    }
-    const result = await TourPlace.updatePlace({
-      id: existingPlace.id,
-      title,
-      description,
-      location,
-      district,
-      categories,
-      userId: existingPlace.userId,
-    });
-
-    if (!result) {
-      next(new HttpError("Failed to update place", 500));
-      return;
-    }
-    res.status(200).json({
-      message: "Place updated successfully!",
-      updatedPlace: result,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-///////////////////////delete place////////////////////////////
-
-const deletePlace = async (req: Request, res: Response, next: NextFunction) => {
-  const placeId = parseInt(req.params.pid);
-  if (placeId === null || placeId === undefined || isNaN(placeId)) {
-    next(new HttpError("Invalid place ID", 400));
-    return;
-  }
-  try {
-    const existingPlace = await TourPlace.getPlaceById(placeId);
-    if (!existingPlace) {
-      next(new HttpError("Place not found", 404));
-      return;
-    }
-    const response = await TourPlace.deletePlace(placeId);
-    res
-      .status(200)
-      .json({ message: "Place deleted successfully!", deletedItemId: placeId });
-  } catch (error) {
-    next(
-      new HttpError(
-        "An unexpected error occurred. Please try again later.",
-        500
-      )
-    );
-  }
-};
-
-///////////////////////get all places by user id///////////////////////////
+/////////////////////get place by user id/////////////////
 
 const getAllPlacesByUid = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const userId = parseInt(req.params.uid);
-  if (userId === null || userId === undefined || isNaN(userId)) {
+  const userId = req.params.uid;
+  if (userId === null || userId === undefined) {
     next(new HttpError("Invalid User Id", 400));
     return;
   }
   try {
-    const places = await TourPlace.getPlacesByUid(userId);
+    const places = await Place.find({ userId });
     if (!places) {
       next(new HttpError("Not found places", 404));
       return;
@@ -163,27 +91,137 @@ const getAllPlacesByUid = async (
   }
 };
 
-//////////////////////////////////get all places by district///////////////////////
+//////////////////////////update place//////////////////////////////
 
-const getPlacesByDistrict = (
+const updatePlace = async (req: Request, res: Response, next: NextFunction) => {
+  const placeId = req.params.pid;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    next(new HttpError("Invalid inputs, please check your data", 400));
+    return;
+  }
+
+  const { title, description, location, district, categories, userId } =
+    req.body;
+  try {
+    const existingPlace = await Place.findById(placeId);
+    if (!existingPlace) {
+      next(new HttpError("Place not found", 404));
+      return;
+    }
+
+    if (existingPlace.userId?.toString() !== userId) {
+      next(new HttpError("Not authorized to update this place", 403));
+      return;
+    }
+
+    existingPlace.title = title;
+    existingPlace.description = description;
+    existingPlace.location = location;
+    existingPlace.district = district;
+    existingPlace.categories = categories;
+
+    const result = await existingPlace.save();
+
+    if (!result) {
+      next(new HttpError("Failed to update place", 500));
+      return;
+    }
+    res.status(200).json({
+      message: "Place updated successfully!",
+      updatedPlace: result,
+    });
+  } catch (error) {
+    return next(
+      new HttpError(
+        "An unexpected error occurred. Please try again later.",
+        500
+      )
+    );
+  }
+};
+
+///////////////////////delete place////////////////////////////
+
+const deletePlace = async (req: Request, res: Response, next: NextFunction) => {
+  const placeId = req.params.pid;
+  if (placeId === null || placeId === undefined) {
+    next(new HttpError("Invalid place ID", 400));
+    return;
+  }
+  try {
+    const existingPlace = await Place.findById(placeId);
+    if (!existingPlace) {
+      next(new HttpError("Place not found", 404));
+      return;
+    }
+
+    await Place.findByIdAndDelete(placeId);
+    res
+      .status(200)
+      .json({ message: "Place deleted successfully!", deletedItemId: placeId });
+  } catch (error) {
+    next(
+      new HttpError(
+        "An unexpected error occurred. Please try again later.",
+        500
+      )
+    );
+    return;
+  }
+};
+
+//////////////////////////////////get all places by given key///////////////////////
+
+const filterPlaces = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const district = req.body;
-};
-const getPlacesByCategory = () => {};
-const getAllPlaceByCurrentLocation = () => {};
+  try {
+    const filters: any = {}; // Dynamic filters
+    // Extract filters dynamically from query parameters
+    for (const [key, value] of Object.entries(req.query)) {
+      if (value) {
+        if (key === "categories") {
+          // Convert categories into an array and use $in for at least one match
+          const categoriesArray = Array.isArray(value)
+            ? value
+            : value.toString().split(",");
+          filters.categories = { $in: categoriesArray };
+        } else {
+          filters[key] = value;
+        }
+      }
+    }
 
-//const getPlaceByUid = () => {};
+    if (Object.keys(filters).length === 0) {
+      next(new HttpError("No filters provided", 400));
+      return;
+    }
+    const places = await Place.find(filters);
+
+    if (places.length === 0) {
+      next(new HttpError("No places found matching the given criteria", 404));
+      return;
+    }
+    res.status(200).json({ places });
+  } catch (error) {
+    next(
+      new HttpError(
+        "An unexpected error occurred. Please try again later.",
+        500
+      )
+    );
+    return;
+  }
+};
 
 export default {
   createPlace,
-  getAllPlacesByUid,
-  //getPlaceByUid,
   getPlaceByPid,
-  getPlacesByDistrict,
-  getPlacesByCategory,
+  getAllPlacesByUid,
   updatePlace,
   deletePlace,
+  filterPlaces,
 };
